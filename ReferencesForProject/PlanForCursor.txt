@@ -1,0 +1,44 @@
+Initial Setup:
+Write the code for this in python.
+
+1. Make a Bat file  that makes a venv in the current directory and installs all the requirements to it.
+There should be a requirements.txt that holds the python requirements that the install bat file pulls format
+There should also be a run.bat file that activates that venv and runs the app
+
+2. Have a config that holds the API key needed for the google gemini rather than using environment variables
+
+3. Make a model definition that represents a campaign_brief that has a product name, a target region/market, a target audience, and a campaign message (all strings).
+
+4. Write an example .json file in folder called inputs with that definition but a list.  So it's a list of campaign_briefs.  This example should be targeting Adobe Firefly product and Adobe photoshop.  
+One targets Texas, USA and specifically game developers.  The other Paris France.  
+
+5. There should also be a folder called InputAssets that'll hold optional reference images for the products.  
+
+The App:
+
+6. Make a default web app that is run when running the app.  This should display the json while letting the user edit anything they want in the text box before submitting.  
+There should also be a open file button to open a different json file.
+
+7. To the right of the textbox should be a gallery view of the image assets that might be in the InputAssets folder.  There should be a checkbox on each one that you can check on or off to include or exclude defaulting to all include.
+
+8.  To the left of the TextBox should be a Gallery output of the images generated so far for the campaign_briefs.
+
+9. When clicking the generate button on the bottom right, it should send out a request for each campaign_brief  in the json to gemini with all the checked images sent to it.  
+The prompt for gemini should be: "Given this campaign brief <serialize campaign brief here> and possibly relevent input assets, make a marketing campaign image for the target region/market and audience mention in the brief. 
+It should follow the language spoken in that region / the language spoken by that demographic.  It should have the text of the campaign message in the advert.
+
+10.  Make the first campaign_brief request for each campaign_brief a 1:1 ratio, then in two follow up messages ask for ratios 9:16 and ratios 16:9 from that first message.  To be clear that means it makes a request to
+gemini2.5 flash for an image of the campaign as I described.  Then does a follow up asking for 9:16 ratio.  Then from that same chat thread after the first message asks for a 16:9 ratio of it.
+
+
+11. Store all these images in an output folder.  Each campaign_brief is for a single product, so the images should be in their respective products and then under another folder for that product image's aspect ratio.
+output->product_name->1_1, 9_16, 16_9
+
+12.  Add a button that sends up separate requests with any input images along with the each generated image in a separate request.  The prompt should be check to make sure if there 
+is a logo or band color in the input images that the generated image utilizes it.  It should mention the product name so the output can be "Adobe Firefly follows the logo and logo colors.  Or another example,
+Adobe Fireflay fails the logo but does have the colors.  
+
+13. This should also have it output whether the product contains any flagged prohibited words (anything inappropriate).  Example output: "Adobe Firefly has no prohibited words" or "Adobe Firefly has prohibited words"
+Once it's done this for all of the generated images for each product and their ratios, it should output each of those outputs (a newline each) in a textfile called "Compiance_Checks.txt"
+
+14. Make a comprehensive README file

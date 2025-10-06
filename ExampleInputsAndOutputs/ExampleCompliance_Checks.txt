@@ -1,0 +1,180 @@
+PRODUCT: Adobe Firefly
+ASPECT RATIO: 16:9
+
+BRAND COMPLIANCE CHECK:
+Why this check is needed: Brand compliance ensures the campaign image properly uses the official brand logo and colors to maintain brand consistency and recognition across all marketing materials.
+
+Logo Assessment: [PASS]
+- What was checked: Presence and correct usage of brand logo
+- Findings: The Adobe Firefly logo is present in the bottom left corner of the image. It accurately matches the provided brand asset image for Adobe Firefly, including the "Fi" text and the star icon. The "Adobe Firefly" text next to the logo is also correctly rendered.
+
+Color Assessment: [PASS]
+- What was checked: Usage of official brand colors
+- Findings: The primary brand color for Adobe Firefly, a vibrant red (as seen in the provided logo asset), is consistently used in the logo within the campaign image. While the overall image features a broad spectrum of colors to create a fantastical landscape, the specific brand element (the logo) correctly adheres to the established brand color. The fiery glow effect around the "AI" text also aligns with the warm tones often associated with the Firefly brand, enhancing visual consistency without being a direct brand color match.
+
+Overall Result: [PASS]
+
+PRODUCT: Adobe Firefly
+ASPECT RATIO: 16:9
+
+PROHIBITED WORDS CHECK:
+Why this check is needed: This check ensures the campaign image does not contain any inappropriate, offensive, misspelled, or unprofessional text that could harm the brand reputation or violate content policies.
+
+Text Content Assessment: [FAIL]
+- What was checked: All visible text in the image for prohibited words, inappropriate language, misspellings, or unprofessional content
+- Text found in image: "ADOBE FIREFLY", "Ai", "CREATE STUNNING GAME ASSETS WITH FUCKING AI-POWERED CREATIVITY", "Adobe Firefly"
+- Findings: The word "FUCKING" is present in the text "CREATE STUNNING GAME ASSETS WITH FUCKING AI-POWERED CREATIVITY". This is an inappropriate and unprofessional word that violates content policies and could harm brand reputation.
+
+Overall Result: [FAIL]
+================================================================================
+
+PRODUCT: Adobe Firefly
+ASPECT RATIO: 1:1
+
+BRAND COMPLIANCE CHECK:
+Why this check is needed: Brand compliance ensures the campaign image properly uses the official brand logo and colors to maintain brand consistency and recognition across all marketing materials.
+
+Logo Assessment: [PASS]
+- What was checked: Presence and correct usage of brand logo
+- Findings: The Adobe Firefly logo is present in the bottom left corner of the image. It accurately matches the provided brand asset for Adobe Firefly, including the "Fi" icon and the "Adobe Firefly" text.
+
+Color Assessment: [PASS]
+- What was checked: Usage of official brand colors
+- Findings: The primary colors used for the Adobe Firefly logo in the bottom left are the official red background and white text/icon as seen in the provided brand asset. The overall image incorporates a wide range of colors for the city illustration, but the brand-specific elements adhere to the correct color scheme.
+
+Overall Result: [PASS]
+
+PRODUCT: Adobe Firefly
+ASPECT RATIO: 1:1
+
+PROHIBITED WORDS CHECK:
+Why this check is needed: This check ensures the campaign image does not contain any inappropriate, offensive, misspelled, or unprofessional text that could harm the brand reputation or violate content policies.
+
+Text Content Assessment: [FAIL]
+- What was checked: All visible text in the image for prohibited words, inappropriate language, misspellings, or unprofessional content
+- Text found in image: "ADOBE FIREFLY", "Ai", "CREATE STUNNING GAME ASSETS WITH FUCKING AI-POWERED CREATIVITY", "Fi Adobe Firefly"
+- Findings: The word "FUCKING" is present in the text "CREATE STUNNING GAME ASSETS WITH FUCKING AI-POWERED CREATIVITY". This is considered an inappropriate and unprofessional word for a brand campaign and could be offensive to some audiences.
+
+Overall Result: [FAIL]
+================================================================================
+
+PRODUCT: Adobe Firefly
+ASPECT RATIO: 9:16
+
+BRAND COMPLIANCE CHECK:
+Why this check is needed: Brand compliance ensures the campaign image properly uses the official brand logo and colors to maintain brand consistency and recognition across all marketing materials.
+
+Logo Assessment: [PASS]
+- What was checked: Presence and correct usage of brand logo
+- Findings: The Adobe Firefly logo is present in the bottom left corner of the image. It matches the provided brand asset for Adobe Firefly, featuring the red square with "Fi" and the star icon in white. It is appropriately sized and clearly visible.
+
+Color Assessment: [PASS]
+- What was checked: Usage of official brand colors
+- Findings: The primary brand color for Adobe Firefly, red (as seen in the logo), is prominently used in the logo itself and also reflected in the fiery elements of the image, which aligns well with the "Firefly" theme. While the overall image incorporates a wider spectrum of colors to create the cityscape and background, the core brand color is correctly applied where the logo is displayed.
+
+Overall Result: [PASS]
+
+PRODUCT: Adobe Firefly
+ASPECT RATIO: 9:16
+
+PROHIBITED WORDS CHECK:
+Why this check is needed: This check ensures the campaign image does not contain any inappropriate, offensive, misspelled, or unprofessional text that could harm the brand reputation or violate content policies.
+
+Text Content Assessment: [FAIL]
+- What was checked: All visible text in the image for prohibited words, inappropriate language, misspellings, or unprofessional content
+- Text found in image: "ADOBE FIREFLY", "AI", "CREATE STUNNING GAME ASSETS WITH FUCKING AMPOWERED CREATIVITY", "Fi Adobe Firefly"
+- Findings: The word "FUCKING" is present in the text "CREATE STUNNING GAME ASSETS WITH FUCKING AMPOWERED CREATIVITY". This word is highly unprofessional and offensive, making the text inappropriate for a campaign image and potentially damaging to the brand's reputation.
+
+Overall Result: [FAIL]
+================================================================================
+
+PRODUCT: Adobe Photoshop
+ASPECT RATIO: 16:9
+
+BRAND COMPLIANCE CHECK:
+Why this check is needed: Brand compliance ensures the campaign image properly uses the official brand logo and colors to maintain brand consistency and recognition across all marketing materials.
+
+Logo Assessment: [PASS]
+- What was checked: Presence and correct usage of brand logo
+- Findings: The campaign image correctly uses the Adobe Photoshop logo from the provided brand assets. It is placed in the top-left corner, which is a common and appropriate placement for brand logos in marketing materials. The logo is clearly visible and proportional to the overall image.
+
+Color Assessment: [PASS]
+- What was checked: Usage of official brand colors
+- Findings: The campaign image incorporates the official Adobe Photoshop brand colors. The blue 'Ps' icon against the dark background matches the provided brand asset logo. The overall color scheme of the image, particularly the dark tones on the left side and the warm sunset colors on the right, complements the brand's aesthetic without clashing. The text "Adobe Photoshop" and "TRANSFORMEZ VOS PHOTOS EN PUTAINS DE CHEF-D'�UVRES" are in white, which provides good contrast against the darker parts of the image and is a neutral color often used in branding.
+
+Overall Result: [PASS]
+
+PRODUCT: Adobe Photoshop
+ASPECT RATIO: 16:9
+
+PROHIBITED WORDS CHECK:
+Why this check is needed: This check ensures the campaign image does not contain any inappropriate, offensive, misspelled, or unprofessional text that could harm the brand reputation or violate content policies.
+
+Text Content Assessment: [FAIL]
+- What was checked: All visible text in the image for prohibited words, inappropriate language, misspellings, or unprofessional content
+- Text found in image: "Ps", "Adobe Photoshop", "TRANSFORMEZ VOS PHOTOS EN PUTAIN DE CHEF-D��UVRES"
+- Findings: The phrase "PUTAIN DE CHEF-D��UVRES" contains the word "putain," which is a French expletive. While it can sometimes be used colloquially to emphasize, in a professional and brand-safe context, it is considered inappropriate and unprofessional.
+
+Overall Result: [FAIL]
+================================================================================
+
+PRODUCT: Adobe Photoshop
+ASPECT RATIO: 1:1
+
+BRAND COMPLIANCE CHECK:
+Why this check is needed: Brand compliance ensures the campaign image properly uses the official brand logo and colors to maintain brand consistency and recognition across all marketing materials.
+
+Logo Assessment: [PASS]
+- What was checked: Presence and correct usage of brand logo
+- Findings: The Adobe Photoshop logo is present in the top-left corner of the image. It accurately matches the provided brand asset for the Adobe Photoshop logo in terms of design and proportions. The placement is appropriate for a campaign image.
+
+Color Assessment: [PASS]
+- What was checked: Usage of official brand colors
+- Findings: The primary colors used for the Adobe Photoshop logo within the campaign image (blue "Ps" on a dark background) correctly match the colors in the provided Adobe Photoshop brand asset. The overall color scheme of the campaign image itself focuses on the sunset over Paris, which is a photographic element rather than a brand color requirement for the background, but the logo's colors are compliant.
+
+Overall Result: [PASS]
+
+PRODUCT: Adobe Photoshop
+ASPECT RATIO: 1:1
+
+PROHIBITED WORDS CHECK:
+Why this check is needed: This check ensures the campaign image does not contain any inappropriate, offensive, misspelled, or unprofessional text that could harm the brand reputation or violate content policies.
+
+Text Content Assessment: [FAIL]
+- What was checked: All visible text in the image for prohibited words, inappropriate language, misspellings, or unprofessional content
+- Text found in image: "Ps", "Adobe Photoshop", "TRANSFORMEZ VOS PHOTOS EN PUTAIN DE CHEF-D'�UVRES"
+- Findings: The phrase "PUTAIN DE" is highly problematic. "Putain" is a strong French expletive, roughly equivalent to "damn" or "fucking" in English, and is generally considered vulgar and unprofessional in a marketing context, especially for a reputable brand like Adobe. It is entirely inappropriate for a campaign image and could severely damage brand perception.
+
+Overall Result: [FAIL]
+================================================================================
+
+PRODUCT: Adobe Photoshop
+ASPECT RATIO: 9:16
+
+BRAND COMPLIANCE CHECK:
+Why this check is needed: Brand compliance ensures the campaign image properly uses the official brand logo and colors to maintain brand consistency and recognition across all marketing materials.
+
+Logo Assessment: [PASS]
+- What was checked: Presence and correct usage of brand logo
+- Findings: The Adobe Photoshop logo is present in the top left corner of the image. It accurately matches the provided brand asset for Adobe Photoshop, including the "Ps" monogram in blue on a dark background. The placement and size appear appropriate for a mobile-first advertisement.
+
+Color Assessment: [PASS]
+- What was checked: Usage of official brand colors
+- Findings: The primary brand colors of Adobe Photoshop, specifically the blue from the "Ps" logo and the dark background, are correctly utilized in the logo itself. While the overall image content (Eiffel Tower, sky) uses a broad range of colors, the branding elements adhere to the official palette. The text "Adobe Photoshop" is white, which is a common and acceptable contrast color against darker brand backgrounds.
+
+Overall Result: [PASS]
+
+PRODUCT: Adobe Photoshop
+ASPECT RATIO: 9:16
+
+PROHIBITED WORDS CHECK:
+Why this check is needed: This check ensures the campaign image does not contain any inappropriate, offensive, misspelled, or unprofessional text that could harm the brand reputation or violate content policies.
+
+Text Content Assessment: [FAIL]
+- What was checked: All visible text in the image for prohibited words, inappropriate language, misspellings, or unprofessional content
+- Text found in image: "Ps", "Adobe Photoshop", "TRANSFORMEZ VOS PHOTOS EN PUTAINS DE CHEF-D'OEUVRES"
+- Findings: The phrase "PUTAINS DE CHEF-D'OEUVRES" contains the word "putains," which is a French expletive and is considered highly inappropriate and offensive in a professional context.
+
+Overall Result: [FAIL]
+================================================================================
+

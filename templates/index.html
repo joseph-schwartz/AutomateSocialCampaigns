@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Automation Pipeline</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>Creative Automation Pipeline</h1>
+        <p>Automate social campaign creative generation with AI</p>
+    </div>
+
+    <div class="container">
+        <!-- Left Panel: Output Gallery -->
+        <div class="panel output-panel">
+            <h2>Generated Campaigns</h2>
+            <div id="output-gallery" class="gallery">
+                <p class="placeholder">Generated images will appear here...</p>
+            </div>
+        </div>
+        
+        <!-- Preview Overlay -->
+        <div id="preview-overlay" class="preview-overlay">
+            <div class="preview-content">
+                <img id="preview-image" class="preview-image" src="" alt="Preview">
+                <div id="preview-info" class="preview-info"></div>
+                <div class="preview-close-hint">Click to close</div>
+            </div>
+        </div>
+
+        <!-- Middle Panel: JSON Editor -->
+        <div class="panel editor-panel">
+            <div class="editor-header">
+                <h2>Campaign Briefs</h2>
+                <input type="file" id="file-input" accept=".json" style="display: none;">
+                <button id="load-file-btn" class="btn btn-secondary">Open JSON File</button>
+            </div>
+            <textarea id="json-editor" placeholder="Campaign briefs will load here..."></textarea>
+            <div class="editor-footer">
+                <div class="status-message" id="status-message"></div>
+                <button id="compliance-btn" class="btn btn-warning">Run Compliance Checks</button>
+                <button id="generate-btn" class="btn btn-primary">Generate Campaigns</button>
+            </div>
+            
+            <!-- Log Console Panel -->
+            <div class="log-console" id="log-console">
+                <div class="log-header">
+                    <h3>📋 Activity Log</h3>
+                    <button id="clear-log-btn" class="btn-icon" title="Clear log">🗑️</button>
+                </div>
+                <div id="log-output" class="log-output">
+                    <div class="log-entry log-info">
+                        <span class="log-time">[Ready]</span>
+                        <span class="log-message">Waiting for actions...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel: Input Assets Gallery -->
+        <div class="panel input-panel">
+            <h2>Input Assets</h2>
+            <div id="input-gallery" class="gallery">
+                <p class="placeholder">No input assets found. Add images to the InputAssets folder.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let inputAssets = [];
+        let selectedAssets = [];
+        let eventSource = null;
+        let currentSessionId = null;
+
+        // Generate a unique session ID
+        function generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Log console management
+        function showLogConsole() {
+            // Log console is always visible now
+        }
+
+        function hideLogConsole() {
+            // Log console is always visible now
+        }
+
+        function clearLog() {
+            const logOutput = document.getElementById('log-output');
+            logOutput.innerHTML = '<div class="log-entry log-info"><span class="log-time">[Ready]</span> <span class="log-message">Waiting for actions...</span></div>';
+        }
+
+        function addLogMessage(message, type = 'info') {
+            const logOutput = document.getElementById('log-output');
+            
+            // Clear the "Waiting for actions" message if it exists
+            if (logOutput.children.length === 1 && logOutput.textContent.includes('Waiting for actions')) {
+                logOutput.innerHTML = '';
+            }
+            
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            
+            const timestamp = new Date().toLocaleTimeString();
+            entry.innerHTML = `<span class="log-time">[${timestamp}]</span> <span class="log-message">${escapeHtml(message)}</span>`;
+            
+            logOutput.appendChild(entry);
+            
+            // Auto-scroll to bottom to show newest entries
+            logOutput.scrollTop = logOutput.scrollHeight;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Connect to SSE stream
+        function connectToLogStream(sessionId) {
+            if (eventSource) {
+                eventSource.close();
+            }
+
+            currentSessionId = sessionId;
+
+            eventSource = new EventSource(`/api/stream/${sessionId}`);
+
+            eventSource.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    
+                    if (data.type === 'heartbeat') {
+                        // Ignore heartbeat messages
+                        return;
+                    }
+                    
+                    if (data.type === 'complete') {
+                        // Process completed
+                        eventSource.close();
+                        eventSource = null;
+                        return;
+                    }
+                    
+                    if (data.type === 'gallery_cleared') {
+                        // Output folder was cleared - update gallery to show empty
+                        const gallery = document.getElementById('output-gallery');
+                        gallery.innerHTML = '<p class="placeholder">Generating images...</p>';
+                        lastRenderedImages = null;
+                        return;
+                    }
+                    
+                    if (data.type === 'image_complete') {
+                        // Image was saved - refresh gallery immediately
+                        loadOutputImages();
+                        return;
+                    }
+
+                    addLogMessage(data.message, data.type);
+                } catch (e) {
+                    console.error('Error parsing SSE message:', e);
+                }
+            };
+
+            eventSource.onerror = (error) => {
+                console.error('SSE error:', error);
+                if (eventSource) {
+                    eventSource.close();
+                    eventSource = null;
+                }
+            };
+        }
+
+        // Load initial data
+        async function loadInitialData() {
+            await loadBriefs();
+            await loadInputAssets();
+            await loadOutputImages();
+        }
+
+        // Load default campaign briefs
+        async function loadBriefs() {
+            try {
+                const response = await fetch('/api/load_briefs');
+                const data = await response.json();
+                if (data.success) {
+                    document.getElementById('json-editor').value = JSON.stringify(data.briefs, null, 2);
+                }
+            } catch (error) {
+                console.error('Error loading briefs:', error);
+                showStatus('Error loading campaign briefs', 'error');
+            }
+        }
+
+        // Load input assets
+        async function loadInputAssets() {
+            try {
+                const response = await fetch('/api/input_assets');
+                const data = await response.json();
+                if (data.success) {
+                    inputAssets = data.assets;
+                    selectedAssets = [...data.assets]; // All selected by default
+                    renderInputGallery();
+                }
+            } catch (error) {
+                console.error('Error loading input assets:', error);
+            }
+        }
+
+        // Load output images
+        async function loadOutputImages() {
+            try {
+                const response = await fetch('/api/output_images');
+                const data = await response.json();
+                if (data.success) {
+                    renderOutputGallery(data.images);
+                }
+            } catch (error) {
+                console.error('Error loading output images:', error);
+            }
+        }
+
+        // Render input assets gallery
+        function renderInputGallery() {
+            const gallery = document.getElementById('input-gallery');
+            
+            if (inputAssets.length === 0) {
+                gallery.innerHTML = '<p class="placeholder">No input assets found. Add images to the InputAssets folder.</p>';
+                return;
+            }
+
+            gallery.innerHTML = '';
+            inputAssets.forEach(asset => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.checked = selectedAssets.includes(asset);
+                checkbox.onchange = (e) => {
+                    if (e.target.checked) {
+                        selectedAssets.push(asset);
+                    } else {
+                        selectedAssets = selectedAssets.filter(a => a !== asset);
+                    }
+                };
+
+                const img = document.createElement('img');
+                // Add cache-busting timestamp to prevent browser from showing old images
+                img.src = `/InputAssets/${asset}?t=${Date.now()}`;
+                img.alt = asset;
+                img.onclick = () => {
+                    checkbox.checked = !checkbox.checked;
+                    checkbox.onchange({target: checkbox});
+                };
+
+                const label = document.createElement('div');
+                label.className = 'asset-label';
+                label.textContent = asset;
+
+                item.appendChild(checkbox);
+                item.appendChild(img);
+                item.appendChild(label);
+                gallery.appendChild(item);
+            });
+        }
+
+        // Track last rendered images to prevent flickering
+        let lastRenderedImages = null;
+        let selectedThumbnail = null; // Track which thumbnail is selected
+        
+        // Render output gallery
+        function renderOutputGallery(images) {
+            const gallery = document.getElementById('output-gallery');
+            
+            if (Object.keys(images).length === 0) {
+                gallery.innerHTML = '<p class="placeholder">Generated images will appear here...</p>';
+                lastRenderedImages = null;
+                return;
+            }
+
+            // Check if images have actually changed to prevent flickering
+            const imagesString = JSON.stringify(images);
+            if (imagesString === lastRenderedImages) {
+                return; // No changes, don't re-render
+            }
+            lastRenderedImages = imagesString;
+
+            gallery.innerHTML = '';
+            
+            // Flatten the structure to show all images as thumbnails
+            for (const [product, ratios] of Object.entries(images)) {
+                for (const [ratio, imageList] of Object.entries(ratios)) {
+                    imageList.forEach(imagePath => {
+                        const container = document.createElement('div');
+                        container.className = 'output-thumbnail-container';
+                        
+                        const img = document.createElement('img');
+                        // Add cache-busting timestamp to prevent browser from showing old images
+                        img.src = `/output/${imagePath}?t=${Date.now()}`;
+                        img.alt = `${product} - ${ratio}`;
+                        // Add ratio class for proper aspect ratio
+                        img.className = `output-thumbnail ratio-${ratio.replace('_', '-')}`;
+                        
+                        const label = document.createElement('div');
+                        label.className = 'thumbnail-label';
+                        label.textContent = product.replace(/_/g, ' ');
+                        
+                        const sublabel = document.createElement('div');
+                        sublabel.className = 'thumbnail-sublabel';
+                        sublabel.textContent = ratio.replace('_', ':');
+                        
+                        // Add hover preview with delay to prevent flickering
+                        let enterTimeout;
+                        container.addEventListener('mouseenter', () => {
+                            if (!isPreviewPinned) {
+                                enterTimeout = setTimeout(() => {
+                                    // Use cache-busted URL for preview too
+                                    const previewUrl = `/output/${imagePath}?t=${Date.now()}`;
+                                    showPreview(previewUrl, `${product.replace(/_/g, ' ')} - ${ratio.replace('_', ':')}`);
+                                }, 100);
+                            }
+                        });
+                        
+                        container.addEventListener('mouseleave', () => {
+                            clearTimeout(enterTimeout);
+                            if (!isPreviewPinned) {
+                                hidePreviewDelayed();
+                            }
+                        });
+                        
+                        // Click to pin/open preview or toggle off
+                        container.addEventListener('click', () => {
+                            if (selectedThumbnail === container) {
+                                // Clicking the same thumbnail again - close preview
+                                hidePreview();
+                                container.classList.remove('selected');
+                                selectedThumbnail = null;
+                            } else {
+                                // Clicking a different thumbnail - show preview and mark as selected
+                                if (selectedThumbnail) {
+                                    selectedThumbnail.classList.remove('selected');
+                                }
+                                // Use cache-busted URL for preview too
+                                const previewUrl = `/output/${imagePath}?t=${Date.now()}`;
+                                showPreviewPinned(previewUrl, `${product.replace(/_/g, ' ')} - ${ratio.replace('_', ':')}`);
+                                container.classList.add('selected');
+                                selectedThumbnail = container;
+                            }
+                        });
+                        
+                        container.appendChild(img);
+                        container.appendChild(label);
+                        container.appendChild(sublabel);
+                        gallery.appendChild(container);
+                    });
+                }
+            }
+        }
+        
+        // Preview hover state management
+        let previewHideTimeout = null;
+        let isOverPreview = false;
+        let isPreviewPinned = false;
+        
+        // Show preview overlay (hover mode)
+        function showPreview(imageSrc, info) {
+            if (isPreviewPinned) return; // Don't show hover preview if pinned
+            
+            clearTimeout(previewHideTimeout);
+            
+            const overlay = document.getElementById('preview-overlay');
+            const previewImage = document.getElementById('preview-image');
+            const previewInfo = document.getElementById('preview-info');
+            
+            previewImage.src = imageSrc;
+            previewInfo.textContent = info;
+            overlay.classList.add('active');
+        }
+        
+        // Show preview pinned (click mode - stays until clicked)
+        function showPreviewPinned(imageSrc, info) {
+            clearTimeout(previewHideTimeout);
+            isPreviewPinned = true;
+            
+            const overlay = document.getElementById('preview-overlay');
+            const previewImage = document.getElementById('preview-image');
+            const previewInfo = document.getElementById('preview-info');
+            
+            previewImage.src = imageSrc;
+            previewInfo.textContent = info;
+            overlay.classList.add('active');
+        }
+        
+        // Hide preview with delay
+        function hidePreviewDelayed() {
+            if (isPreviewPinned) return; // Don't auto-hide if pinned
+            
+            previewHideTimeout = setTimeout(() => {
+                if (!isOverPreview && !isPreviewPinned) {
+                    hidePreview();
+                }
+            }, 200);
+        }
+        
+        // Hide preview overlay immediately
+        function hidePreview() {
+            const overlay = document.getElementById('preview-overlay');
+            overlay.classList.remove('active');
+            isPreviewPinned = false;
+            
+            // Remove selected state from thumbnail
+            if (selectedThumbnail) {
+                selectedThumbnail.classList.remove('selected');
+                selectedThumbnail = null;
+            }
+        }
+        
+        // Setup preview overlay hover behavior
+        function setupPreviewOverlay() {
+            const previewImage = document.getElementById('preview-image');
+            const previewContent = document.querySelector('.preview-content');
+            
+            // Keep preview open when hovering over it (but don't pin it)
+            previewContent.addEventListener('mouseenter', () => {
+                isOverPreview = true;
+                clearTimeout(previewHideTimeout);
+            });
+            
+            previewContent.addEventListener('mouseleave', () => {
+                isOverPreview = false;
+                if (!isPreviewPinned) {
+                    hidePreviewDelayed();
+                }
+            });
+            
+            // Click preview image to toggle pin/close
+            previewImage.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (isPreviewPinned) {
+                    // If already pinned, close it
+                    hidePreview();
+                } else {
+                    // If just hovering, pin it
+                    isPreviewPinned = true;
+                }
+            });
+        }
+        
+        // Auto-refresh output gallery
+        let autoRefreshInterval = null;
+        
+        function startAutoRefresh() {
+            // Clear any existing interval
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+            }
+            
+            // Refresh every 2 seconds while generating
+            autoRefreshInterval = setInterval(async () => {
+                await loadOutputImages();
+            }, 2000);
+            
+            // Stop auto-refresh after 60 seconds
+            setTimeout(() => {
+                if (autoRefreshInterval) {
+                    clearInterval(autoRefreshInterval);
+                    autoRefreshInterval = null;
+                }
+            }, 60000);
+        }
+        
+        // Stop auto-refresh when leaving the page
+        window.addEventListener('beforeunload', () => {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+            }
+        });
+
+        // Show status message
+        function showStatus(message, type = 'info') {
+            const statusEl = document.getElementById('status-message');
+            statusEl.textContent = message;
+            statusEl.className = `status-message ${type}`;
+            setTimeout(() => {
+                statusEl.textContent = '';
+                statusEl.className = 'status-message';
+            }, 5000);
+        }
+
+        // Generate campaigns
+        async function generateCampaigns() {
+            const generateBtn = document.getElementById('generate-btn');
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'Generating...';
+            showStatus('Generating campaign images...', 'info');
+
+            // Clear the output gallery immediately
+            const gallery = document.getElementById('output-gallery');
+            gallery.innerHTML = '<p class="placeholder">Generating images...</p>';
+            lastRenderedImages = null;
+            selectedThumbnail = null;
+            hidePreview();
+
+            try {
+                const briefsText = document.getElementById('json-editor').value;
+                const briefs = JSON.parse(briefsText);
+                const sessionId = generateSessionId();
+
+                // Connect to log stream first
+                connectToLogStream(sessionId);
+
+                const response = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        briefs: briefs,
+                        selected_assets: selectedAssets,
+                        session_id: sessionId
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    showStatus('Campaign generation in progress...', 'info');
+                    // Set up auto-refresh to check for new images
+                    startAutoRefresh();
+                    
+                    // Wait for completion message before re-enabling button
+                    const checkCompletion = setInterval(() => {
+                        if (!eventSource || eventSource.readyState === EventSource.CLOSED) {
+                            clearInterval(checkCompletion);
+                            generateBtn.disabled = false;
+                            generateBtn.textContent = 'Generate Campaigns';
+                            showStatus('Campaign generation completed!', 'success');
+                            loadOutputImages();
+                        }
+                    }, 500);
+                } else {
+                    showStatus(`Error: ${data.error}`, 'error');
+                    generateBtn.disabled = false;
+                    generateBtn.textContent = 'Generate Campaigns';
+                }
+            } catch (error) {
+                console.error('Error generating campaigns:', error);
+                showStatus('Error generating campaigns. Check console for details.', 'error');
+                generateBtn.disabled = false;
+                generateBtn.textContent = 'Generate Campaigns';
+            }
+        }
+
+        // Run compliance checks
+        async function runComplianceChecks() {
+            const complianceBtn = document.getElementById('compliance-btn');
+            complianceBtn.disabled = true;
+            complianceBtn.textContent = 'Running Checks...';
+            showStatus('Running compliance checks...', 'info');
+
+            try {
+                const sessionId = generateSessionId();
+
+                // Connect to log stream first
+                connectToLogStream(sessionId);
+
+                const response = await fetch('/api/compliance_check', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        selected_assets: selectedAssets,
+                        session_id: sessionId
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    showStatus('Compliance checks in progress...', 'info');
+                    
+                    // Wait for completion message before re-enabling button
+                    const checkCompletion = setInterval(() => {
+                        if (!eventSource || eventSource.readyState === EventSource.CLOSED) {
+                            clearInterval(checkCompletion);
+                            complianceBtn.disabled = false;
+                            complianceBtn.textContent = 'Run Compliance Checks';
+                            showStatus('Compliance checks completed! Check Compliance_Checks.txt', 'success');
+                        }
+                    }, 500);
+                } else {
+                    showStatus(`Error: ${data.error}`, 'error');
+                    complianceBtn.disabled = false;
+                    complianceBtn.textContent = 'Run Compliance Checks';
+                }
+            } catch (error) {
+                console.error('Error running compliance checks:', error);
+                showStatus('Error running compliance checks. Check console for details.', 'error');
+                complianceBtn.disabled = false;
+                complianceBtn.textContent = 'Run Compliance Checks';
+            }
+        }
+
+        // Load file
+        async function loadFile(file) {
+            console.log('Loading file:', file.name);
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('/api/load_file', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                console.log('Response status:', response.status);
+                const data = await response.json();
+                console.log('Response data:', data);
+                
+                if (data.success) {
+                    const jsonString = JSON.stringify(data.briefs, null, 2);
+                    console.log('Setting JSON editor value, length:', jsonString.length);
+                    const editor = document.getElementById('json-editor');
+                    if (editor) {
+                        editor.value = jsonString;
+                        console.log('JSON editor updated successfully');
+                        showStatus('File loaded successfully!', 'success');
+                        addLogMessage(`Loaded ${file.name} with ${Array.isArray(data.briefs) ? data.briefs.length : Object.keys(data.briefs).length} brief(s)`, 'success');
+                    } else {
+                        console.error('JSON editor element not found!');
+                        showStatus('Error: Could not find editor element', 'error');
+                    }
+                } else {
+                    console.error('Load failed:', data.error);
+                    showStatus(`Error: ${data.error}`, 'error');
+                    addLogMessage(`Failed to load ${file.name}: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                console.error('Error loading file:', error);
+                showStatus('Error loading file. Check console for details.', 'error');
+                addLogMessage(`Error loading ${file.name}: ${error.message}`, 'error');
+            }
+        }
+
+        // Event listeners
+        document.getElementById('generate-btn').addEventListener('click', generateCampaigns);
+        document.getElementById('compliance-btn').addEventListener('click', runComplianceChecks);
+        document.getElementById('load-file-btn').addEventListener('click', () => {
+            document.getElementById('file-input').click();
+        });
+        document.getElementById('file-input').addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                loadFile(e.target.files[0]);
+            }
+        });
+        document.getElementById('clear-log-btn').addEventListener('click', clearLog);
+
+        // Load initial data on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadInitialData();
+            setupPreviewOverlay();
+        });
+        
+        // Clean up SSE connection on page unload
+        window.addEventListener('beforeunload', () => {
+            if (eventSource) {
+                eventSource.close();
+            }
+        });
+    </script>
+</body>
+</html>
+

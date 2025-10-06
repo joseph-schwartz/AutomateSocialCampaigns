@@ -1,0 +1,151 @@
+========================================
+CREATIVE AUTOMATION PIPELINE
+Setup Instructions for Interviewers
+========================================
+
+PREREQUISITES:
+--------------
+1. Python 3.8 or higher installed
+   - Download from: https://www.python.org/downloads/
+   - During installation, CHECK "Add Python to PATH"
+
+2. Google Gemini API Key
+   - Get one at: https://ai.google.dev/
+   - You'll need this for the app to work
+
+
+INSTALLATION STEPS:
+-------------------
+
+Step 1: Configure API Key
+   a) Open the file: config.py
+   b) Find the line: GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE"
+   c) Replace YOUR_GEMINI_API_KEY_HERE with your actual API key
+   d) Save the file
+
+Step 2: Install Dependencies
+   a) Double-click: setup.bat
+   b) Wait for installation to complete (1-2 minutes)
+   c) Press any key when prompted
+   d) You should see "Setup complete!" message
+
+
+RUNNING THE APPLICATION:
+------------------------
+
+Step 1: Start the App
+   a) Double-click: run.bat
+   b) A command window will open
+   c) Wait for "Running on http://0.0.0.0:5000" message
+   d) DO NOT close this window
+
+Step 2: Open in Browser
+   a) Open your web browser
+   b) Go to: http://localhost:5000
+   c) You should see the Creative Automation Pipeline interface
+
+
+USING THE APPLICATION:
+----------------------
+
+1. Review Campaign Briefs (Middle Panel)
+   - Default briefs for Adobe Firefly and Photoshop are loaded
+   - You can edit the JSON if desired
+
+2. Add Reference Images (Optional)
+   - Place brand assets in the "InputAssets" folder
+   - They'll appear in the right panel
+   - Use checkboxes to include/exclude them
+
+3. Generate Campaigns
+   - Click "Generate Campaigns" button (bottom right)
+   - Watch REAL-TIME PROGRESS in the log console at the bottom:
+     * 🚀 Starting generation
+     * 🗑️ Auto-clearing old images
+     * ⏳ Progress updates for each aspect ratio
+     * ✅ Success confirmations
+   - Total time: 2-3 minutes
+   - Images appear in the left panel AUTOMATICALLY as they complete
+   - Old images are automatically cleared before new generation
+
+4. Run Compliance Checks (Optional)
+   - Click "Run Compliance Checks" button
+   - Watch live progress in the log console
+   - View detailed PASS/FAIL results in Compliance_Checks.txt
+
+
+OUTPUT LOCATION:
+----------------
+
+Generated images are saved in:
+   output/
+     ├── Adobe_Firefly/
+     │   ├── 1_1/      (Square format)
+     │   ├── 9_16/     (Vertical format)
+     │   └── 16_9/     (Horizontal format)
+     └── Adobe_Photoshop/
+         ├── 1_1/
+         ├── 9_16/
+         └── 16_9/
+
+
+TROUBLESHOOTING:
+----------------
+
+Problem: "python is not recognized"
+Solution: Install Python and make sure "Add to PATH" was checked
+
+Problem: "Invalid API Key" error
+Solution: Check config.py has your correct Gemini API key
+
+Problem: "Module not found" error
+Solution: Run setup.bat again
+
+Problem: Port 5000 already in use
+Solution: Close other apps using port 5000, or modify app.py (last line)
+
+Problem: Images not generating
+Solution: 
+   - Check internet connection
+   - Verify API key is correct
+   - Check Gemini API quota/limits
+
+
+KEY FEATURES TO NOTICE:
+-----------------------
+- Real-time progress updates with emoji indicators
+- Images appear in gallery automatically as they generate
+- Auto-clearing of old images before new generation
+- Detailed compliance reports with PASS/FAIL assessments
+- Background processing - UI remains responsive
+
+DEMO VIDEO:
+-----------
+A 2-3 minute video demonstration is included with this submission.
+The video shows:
+   - How to run the application
+   - Full workflow from brief to generated images
+   - Real-time progress monitoring
+   - Brand compliance checks with detailed reports
+   - Output organization
+
+
+DOCUMENTATION:
+--------------
+- README.md - Comprehensive documentation
+- QUICKSTART.md - Quick start guide
+- VIDEO_DEMO_SCRIPT.md - Script used for demo video
+
+
+CONTACT:
+--------
+For questions during evaluation, please refer to:
+   - README.md for detailed documentation
+   - This file for setup issues
+   - The demo video for usage examples
+
+
+========================================
+Thank you for reviewing this submission!
+========================================
+
