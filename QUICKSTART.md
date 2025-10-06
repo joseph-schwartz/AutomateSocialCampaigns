@@ -2,7 +2,18 @@
 
 Get up and running in 3 minutes!
 
-## Step 1: Setup (First Time Only)
+## Step 1: Clone the Repository
+
+Clone the repository from GitHub:
+
+```bash
+git clone https://github.com/joseph-schwartz/AutomateSocialCampaigns.git
+cd AutomateSocialCampaigns
+```
+
+**Note**: If you don't have Git installed, download it from [https://git-scm.com/downloads](https://git-scm.com/downloads) or download the repository as a ZIP file from GitHub and extract it.
+
+## Step 2: Setup (First Time Only)
 
 1. **Get Google Gemini API Key**
    - Visit: https://ai.google.dev/
@@ -20,7 +31,7 @@ Get up and running in 3 minutes!
 
    You may have to change the py to python, I needed to do the reverse hence it's defaulted that way.
 
-## Step 2: Run the Application
+## Step 3: Run the Application
 
 ```bash
 run.bat
@@ -28,7 +39,7 @@ run.bat
 
 The app will open at: http://localhost:5000
 
-## Step 3: Generate Your First Campaign
+## Step 4: Generate Your First Campaign
 
 1. **Review the Campaign Briefs**
    - The middle panel shows example campaigns for Adobe Firefly and Photoshop

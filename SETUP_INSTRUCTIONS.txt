@@ -17,13 +17,22 @@ PREREQUISITES:
 INSTALLATION STEPS:
 -------------------
 
-Step 1: Configure API Key
+Step 1: Clone the Repository
+   a) Open a command prompt or terminal
+   b) Navigate to where you want to store the project
+   c) Run: git clone https://github.com/joseph-schwartz/AutomateSocialCampaigns.git
+   d) Navigate into the folder: cd AutomateSocialCampaigns
+   
+   Note: If you don't have Git installed, download it from: https://git-scm.com/downloads
+         Or download the repository as a ZIP from GitHub and extract it.
+
+Step 2: Configure API Key
    a) Open the file: config.py
    b) Find the line: GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE"
    c) Replace YOUR_GEMINI_API_KEY_HERE with your actual API key
    d) Save the file
 
-Step 2: Install Dependencies
+Step 3: Install Dependencies
    a) Double-click: setup.bat
    b) Wait for installation to complete (1-2 minutes)
    c) Press any key when prompted

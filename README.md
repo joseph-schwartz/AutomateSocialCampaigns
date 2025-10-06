@@ -33,12 +33,16 @@ This application enables creative teams to rapidly generate variations of campai
 
 ## Installation & Setup
 
-### 1. Clone or Download the Repository
+### 1. Clone the Repository
+
+Clone the repository from GitHub:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/joseph-schwartz/AutomateSocialCampaigns.git
 cd AutomateSocialCampaigns
 ```
+
+**Note**: If you don't have Git installed, download it from [https://git-scm.com/downloads](https://git-scm.com/downloads) or download the repository as a ZIP file from GitHub and extract it.
 
 ### 2. Configure API Key
 
